@@ -1,0 +1,64 @@
+# 1-DOF static fixture for the m*g*r gate. Horizontal link, joint axis +Y, gravity -Z.
+name: single_link
+
+material:
+  name: 6061-T6
+  density_kg_m3: 2700.0
+  E_Pa: 7.0e10
+  nu: 0.33
+
+gravity_m_s2: [0.0, 0.0, -9.81]
+
+payload:
+  mass_kg: 0.0
+  inertia_kg_m2: [1.0e-9, 1.0e-9, 1.0e-9]
+
+tree:
+  root: base
+  links:
+    - name: base
+      parent: null
+    - name: link1
+      parent: base
+      joint:
+        name: joint1
+        type: revolute
+        axis: [0.0, 1.0, 0.0]
+        origin_xyz_m: [0.0, 0.0, 0.0]
+        origin_rpy: [0.0, 0.0, 0.0]
+        limit_lower: -1.5708
+        limit_upper: 1.5708
+        effort: 50.0
+        velocity: 1.0
+
+geometry:
+  links:
+    base:
+      length_mm: 20.0
+      width_mm: 20.0
+      height_mm: 20.0
+      wall_mm: 4.0
+      bore_d_mm: 8.0
+      flange_thick_mm: 6.0
+    link1:
+      # Solid rectangle: same topology as the cantilever fixture so the
+      # gravity handoff is not polluted by a coarse bore mesh.
+      hollow: false
+      length_mm: 200.0
+      width_mm: 20.0
+      height_mm: 10.0
+      wall_mm: 3.0
+      bore_d_mm: 0.0
+      flange_thick_mm: 8.0
+
+mesh:
+  characteristic_length_mm: 3.0
+  element_order: 2
+  max_coupling_nodes: 40
+
+solver:
+  n_modes: 5
+
+dynamics:
+  n_grid: 3
+  analyze_link: link1

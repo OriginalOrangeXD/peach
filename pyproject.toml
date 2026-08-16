@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "armpipe"
+version = "0.1.0"
+description = "Headless parametric robot-arm structural and dynamic analysis pipeline"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy",
+  "pyyaml",
+  "meshio",
+  "gmsh",
+  "build123d",
+  "ccx2paraview",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+armpipe = "armpipe.run:main"
+
+[tool.setuptools.packages.find]
+include = ["armpipe*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

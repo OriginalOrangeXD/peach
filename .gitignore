@@ -1,0 +1,15 @@
+.conda/
+.venv/
+.venv-test/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+work/
+*.frd
+*.dat
+*.sta
+*.cvg
+*.12d
+*.vtu
+.DS_Store

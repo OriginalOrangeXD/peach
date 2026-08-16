@@ -1,0 +1,33 @@
+# Closed-form validation fixture. All geometry is millimetres (CAD/FEA native).
+# Material is SI; units.py converts at the CalculiX boundary.
+name: cantilever
+fixture: rectangular_cantilever
+
+geometry:
+  length_mm: 200.0
+  width_mm: 20.0
+  height_mm: 10.0
+
+frames:
+  origin: fixed_face_center
+  beam_axis: [1.0, 0.0, 0.0]
+  width_axis: [0.0, 1.0, 0.0]
+  height_axis: [0.0, 0.0, 1.0]
+
+material:
+  name: 6061-T6
+  density_kg_m3: 2700.0
+  E_Pa: 7.0e10
+  nu: 0.33
+
+load:
+  # SI newtons at the tip face via DCOUP3D. -Z bends about +Y.
+  force_N: [0.0, 0.0, -50.0]
+
+mesh:
+  characteristic_length_mm: 2.5
+  element_order: 2
+  max_coupling_nodes: 40
+
+solver:
+  n_modes: 5

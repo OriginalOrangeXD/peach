@@ -1,0 +1,93 @@
+# Single source of truth. CAD and URDF both read this file.
+# Geometry is millimetres. Tree / joints / material / payload are SI.
+name: planar_2r
+
+material:
+  name: 6061-T6
+  density_kg_m3: 2700.0
+  E_Pa: 7.0e10
+  nu: 0.33
+
+gravity_m_s2: [0.0, 0.0, -9.81]
+
+payload:
+  mass_kg: 2.0
+  # Point mass at the ee frame origin. Tiny inertia so Pinocchio stays PD.
+  inertia_kg_m2: [1.0e-6, 1.0e-6, 1.0e-6]
+
+# Kinematic tree. Never inferred from CAD.
+# q = 0 is fully extended along +X in the vertical (XZ) plane.
+# Joint axes are +Y so gravity produces bending about Y (same as the cantilever).
+tree:
+  root: base
+  links:
+    - name: base
+      parent: null
+    - name: link1
+      parent: base
+      joint:
+        name: joint1
+        type: revolute
+        axis: [0.0, 1.0, 0.0]
+        origin_xyz_m: [0.0, 0.0, 0.040]
+        origin_rpy: [0.0, 0.0, 0.0]
+        limit_lower: -1.5708
+        limit_upper: 1.5708
+        effort: 80.0
+        velocity: 2.0
+    - name: link2
+      parent: link1
+      joint:
+        name: joint2
+        type: revolute
+        axis: [0.0, 1.0, 0.0]
+        origin_xyz_m: [0.250, 0.0, 0.0]   # MUST equal geometry.links.link1.length_mm / 1000
+        origin_rpy: [0.0, 0.0, 0.0]
+        limit_lower: -2.3562
+        limit_upper: 2.3562
+        effort: 40.0
+        velocity: 3.0
+    - name: payload
+      parent: link2
+      joint:
+        name: joint_ee
+        type: fixed
+        axis: [0.0, 0.0, 0.0]
+        origin_xyz_m: [0.200, 0.0, 0.0]   # MUST equal geometry.links.link2.length_mm / 1000
+        origin_rpy: [0.0, 0.0, 0.0]
+
+geometry:
+  links:
+    base:
+      length_mm: 80.0
+      width_mm: 60.0
+      height_mm: 40.0
+      wall_mm: 6.0
+      bore_d_mm: 16.0
+      flange_thick_mm: 12.0
+    link1:
+      length_mm: 250.0
+      width_mm: 40.0
+      height_mm: 30.0
+      wall_mm: 3.0
+      bore_d_mm: 16.0
+      flange_thick_mm: 10.0
+    link2:
+      length_mm: 200.0
+      width_mm: 32.0
+      height_mm: 24.0
+      wall_mm: 2.5
+      bore_d_mm: 12.0
+      flange_thick_mm: 8.0
+
+mesh:
+  characteristic_length_mm: 4.0
+  element_order: 2
+  max_coupling_nodes: 40
+
+solver:
+  n_modes: 5
+
+dynamics:
+  n_grid: 5
+  analyze_link: link1

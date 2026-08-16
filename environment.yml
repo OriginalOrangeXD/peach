@@ -1,0 +1,18 @@
+# Solver / kinematics stack. Create with:
+#   conda env create -f environment.yml -p .conda
+# Then:
+#   .conda/bin/pip install -e .[dev]
+name: armpipe
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - calculix=2.23
+  - pinocchio=4.1.0
+  - gmsh
+  - meshio
+  - numpy
+  - pyyaml
+  - pytest
+  - pip
